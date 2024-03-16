@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: health-status-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: health-status-app
+  template:
+    metadata:
+      labels:
+        app: health-status-app
+    spec:
+      containers:
+      - name: health-status-app
+        image: makbanov/healthz-app  # Use your Docker image name. Prefix with registry if necessary.
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 5  # Adjust based on your app's startup time
+          periodSeconds: 10
